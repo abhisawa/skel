@@ -1,0 +1,16 @@
+Metrics/LineLength:
+        Max: 120
+
+Metrics/MethodLength:
+        Max: 20
+
+Metrics/AbcSize:
+        Max: 30
+
+Style/EachWithObject:
+        Exclude:
+            - 'lib/skel/cli.rb'
+
+Style/Semicolon:
+        Exclude:
+            - 'lib/skel/cli.rb'

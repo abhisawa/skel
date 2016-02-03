@@ -3,7 +3,7 @@ require 'skel'
 
 module Skel # :nodoc:
   # Thor instance for CLI
-  class CLI
+  class CLI < Thor
     module ExecCommand # :nodoc:
       # @param task: name of task , this is cli command option
       # @param args: this is first argument passed to thor command without hyphen in front
@@ -45,12 +45,10 @@ module Skel # :nodoc:
     desc 'example', 'example command'
     common_options
     method_option :opt1,
-                  aliases: '-o1',
                   desc: 'option 1 for example command, default: false',
                   type: :boolean
 
     method_option :opt2,
-                  aliases: '-o2',
                   desc: 'option 2 for example command'
 
     def example(*args)
@@ -72,7 +70,7 @@ module Skel # :nodoc:
     # default is false which get overriden by ENV['VERBOSE']
     # which can get overriden by command line param --verbose
     def update_logger!
-      @config[:verbose] = @opt.fetch(:verbose) { Skel.is_verbose? }
+      @config[:verbose] = @opt.fetch(:verbose) { Skel.verbose? }
       Skel.logger = Skel.default_logger(@config[:verbose])
     end
   end

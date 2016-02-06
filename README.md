@@ -1,5 +1,7 @@
 # Skel
 
+[![Build Status](https://travis-ci.org/abhisawa/skel.svg?branch=master)](https://travis-ci.org/abhisawa/skel)
+
 This is skeleton gem template for writing command line utilities which provides barebone command and option parsing with help of `Thor` and basic logging structure.
 
 

@@ -1,6 +1,5 @@
 require 'thor'
 require 'skel'
-require 'skel/command/blah'
 
 module Skel # :nodoc:
     module ExecCommand # :nodoc:
@@ -10,14 +9,14 @@ module Skel # :nodoc:
       # @return Return value will be call() defined for each command.
       def exec_cmd(task, args, additional_options = {})
         options = @config.merge(additional_options)
-        require "skel/command/#{task}"
+        require "skel/command/blah/#{task}"
         str_const = Thor::Util.camel_case(task)
         klass = ::Skel::Command.const_get(str_const)
         klass.new(task, args, options).call
       end
     end
   # Thor instance for CLI
-  class CLI < Thor
+  class Blah < Thor
 
     include Skel::ExecCommand
 
@@ -58,8 +57,6 @@ module Skel # :nodoc:
       exec_cmd('example', args, @opt)
     end
 
-    desc "blah SUBCOMMAND ...ARGS", "manage set of tracked repositories"
-    subcommand "blah", Blah
 
     private
 

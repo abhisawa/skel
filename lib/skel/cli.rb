@@ -6,7 +6,6 @@ require 'skel/command/blah'
 module Skel # :nodoc:
   # Thor instance for CLI
   class CLI < Thor
-
     include Skel::Helper
 
     # Config options of each run held by this variable
@@ -41,15 +40,10 @@ module Skel # :nodoc:
                   desc: 'option 2 for example command'
 
     def example(*args)
-      exec_cmd('example', args, @options)
+      exec_cmd('example', args, options)
     end
 
-    desc "blah SUBCOMMAND ...ARGS", "manage set of tracked repositories"
-    subcommand "blah", Blah
-
+    desc 'blah SUBCOMMAND ...ARGS', 'manage set of tracked repositories'
+    subcommand 'blah', Blah
   end
-
 end
-
-
-

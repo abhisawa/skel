@@ -3,16 +3,13 @@ require 'erb'
 require 'skel'
 
 module Skel # :nodoc
-
   module Helper # :nodoc
-
     # @param task: name of task , this is cli command option
     # @param args: this is first argument passed to thor command without hyphen in front
     # @param additional_options: these are additional options passed with hyphen
     # @return Return value will be call() defined for each command.
-    def exec_cmd(task, args, additional_options)
-      opt = @options.dup.inject({}) { |o, (k, v)| o[k.to_sym] = v; o }
-      options = @config.merge(additional_options)
+    def exec_cmd(task, args, options)
+      opt = options.dup.inject({}) { |o, (k, v)| o[k.to_sym] = v; o }
       @config[:verbose] = opt.fetch(:verbose) { Skel.verbose? }
       Skel.logger = Skel.default_logger(@config[:verbose])
       options = @config.merge(opt)
@@ -38,8 +35,5 @@ module Skel # :nodoc
         File.open(file, 'w+') { |f| f.write(render) }
       end
     end
-
-
   end
-
 end

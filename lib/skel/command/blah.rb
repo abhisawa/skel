@@ -1,24 +1,11 @@
 require 'thor'
 require 'skel'
+require 'skel/helper'
 
 module Skel # :nodoc:
-    module ExecCommand # :nodoc:
-      # @param task: name of task , this is cli command option
-      # @param args: this is first argument passed to thor command without hyphen in front
-      # @param additional_options: these are additional options passed with hyphen
-      # @return Return value will be call() defined for each command.
-      def exec_cmd(task, args, additional_options = {})
-        options = @config.merge(additional_options)
-        require "skel/command/blah/#{task}"
-        str_const = Thor::Util.camel_case(task)
-        klass = ::Skel::Command.const_get(str_const)
-        klass.new(task, args, options).call
-      end
-    end
   # Thor instance for CLI
   class Blah < Thor
-
-    include Skel::ExecCommand
+    include Skel::Helper
 
     # Config options of each run held by this variable
     attr_reader :config
@@ -52,31 +39,7 @@ module Skel # :nodoc:
                   desc: 'option 2 for example command'
 
     def example(*args)
-      option_key_to_sym!
-      update_logger!
-      exec_cmd('example', args, @opt)
-    end
-
-
-    private
-
-    # for some odd reason options are not getting collected in form of symbols
-    # this function just convert all keys in symbols
-    def option_key_to_sym!
-      c = options.dup
-      @opt = c.inject({}) { |o, (k, v)| o[k.to_sym] = v; o }
-    end
-
-    # update logger according to verbosity
-    # default is false which get overriden by ENV['VERBOSE']
-    # which can get overriden by command line param --verbose
-    def update_logger!
-      @config[:verbose] = @opt.fetch(:verbose) { Skel.verbose? }
-      Skel.logger = Skel.default_logger(@config[:verbose])
+      exec_cmd('example', args, options)
     end
   end
-
 end
-
-
-

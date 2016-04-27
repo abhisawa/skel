@@ -10,8 +10,8 @@ module Skel # :nodoc
     # @param args: this is first argument passed to thor command without hyphen in front
     # @param additional_options: these are additional options passed with hyphen
     # @return Return value will be call() defined for each command.
-    def exec_cmd(task, args, options)
-      opt = options.dup.inject({}) { |o, (k, v)| o[k.to_sym] = v; o }
+    def exec_cmd(task, args, additional_options)
+      opt = @options.dup.inject({}) { |o, (k, v)| o[k.to_sym] = v; o }
       options = @config.merge(additional_options)
       @config[:verbose] = opt.fetch(:verbose) { Skel.verbose? }
       Skel.logger = Skel.default_logger(@config[:verbose])

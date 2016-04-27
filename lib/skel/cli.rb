@@ -41,9 +41,7 @@ module Skel # :nodoc:
                   desc: 'option 2 for example command'
 
     def example(*args)
-      option_key_to_sym!
-      update_logger!
-      exec_cmd('example', args, @opt)
+      exec_cmd('example', args, @options)
     end
 
     desc "blah SUBCOMMAND ...ARGS", "manage set of tracked repositories"

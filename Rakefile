@@ -3,6 +3,11 @@ require 'rspec/core/rake_task'
 
 module Skel
   module Tasks
+    def exec_cmd(cmd)
+      puts cmd.to_s
+      `#{cmd}`
+    end
+
     def inplace_replace(src, name)
       tmpfile = '/tmp/skel_' + rand(10_000_000).to_s
       out = File.open(tmpfile, 'a+')
@@ -17,22 +22,15 @@ module Skel
       if src =~ /skel/
         new_src = src.gsub(/skel/, name)
         new_src_dir = File.dirname(new_src)
-        puts "mkdir -p #{new_src_dir}"
-        `mkdir -p #{new_src_dir}` unless File.exist?(new_src_dir)
-        puts "mv #{tmpfile} #{new_src}"
-        `mv #{tmpfile} #{new_src} `
-        puts "rm #{src}"
-        `rm #{src}`
+        exec_cmd("mkdir -p #{new_src_dir}") unless File.exist?(new_src_dir)
+        exec_cmd("mv #{tmpfile} #{new_src} ")
+        exec_cmd("rm #{src}")
         src = new_src
       else
-        puts "mv #{tmpfile} #{src}"
-        `mv #{tmpfile} #{src}`
+        exec_cmd("mv #{tmpfile} #{src}")
        end
 
-      if src =~ /bin\//
-        puts "chmod +x #{src}"
-        `chmod +x #{src}`
-        end
+      exec_cmd("chmod +x #{src}") if src =~ /bin\//
     end
 
     def file_action(file, name)
@@ -57,8 +55,7 @@ module Skel
         next unless File.directory?(f)
         path = dir + '/' + f
         if path =~ /skel/
-          puts "rm -rf #{path}"
-          `rm -rf #{path}`
+          exec_cmd("rm -rf #{path}")
         else
           dir_crawl(path, name)
         end
@@ -74,6 +71,8 @@ task :rename do
   name = File.basename(Dir.pwd)
   Skel::Tasks.dir_file_crawl('.', name)
   Skel::Tasks.dir_crawl('.', name)
+  Skel::Tasks.exec_cmd('rm -rf .git && git init') if File.exist?('.git')
+  Skel::Tasks.exec_cmd('rm -rf .idea') if File.exist?('.idea')
 end
 
 task default: :spec
